@@ -2,6 +2,8 @@
 
 O objetivo do projeto **Fake** é criar um ecossistema composto de várias tecnologias utilizadas no desenvolvimento WEB, buscando aplicar os conhecimentos adquiridos em linguagem de programação, padrões de projetos e boas práticas de desenvolvimento.
 
+**Data início:** Jan/2023
+
 ## 1. Etapa
 
 - [x] Planejamento da primeira fase de desenvolvimento;
@@ -22,53 +24,12 @@ O objetivo do projeto **Fake** é criar um ecossistema composto de várias tecno
 
 ## 2. Aplicações
 
-<details>
-  <summary><b>Fake.Accounts.*</b></summary>
-  <p>
-  <details>
-    <summary><b>Fake.Accounts.Api</b></summary>
-    <p>
-
-    Link repositório: https://github.com/antonycharles/fake.accounts.api
-
-    **Tecnologias:**
-      - .Net 7 webapi
-      - PostgreSQL
-
-    </p>
-  </details>
-
-  <details>
-    <summary><b>Fake.Accounts.Login.Web.App</b></summary>
-    <p>
-
-    Link repositório: https://github.com/antonycharles/fake.accounts.login.web.app
-
-    **Tecnologias:**
-      - .Net 7 webapp
-
-    </p>
-  </details>
-  </p>
-</details>
-
-<details>
-  <summary><b>Fake.Store.*</b></summary>
-  <p>
-   Aguardando...
-  </p>
-</details>
-
-<details>
-  <summary><b>Fake.Bank.*</b></summary>
-  <p>
-   Aguardando...
-  </p>
-</details>
-
-<details>
-  <summary><b>Fake.Common.*</b></summary>
-  <p>
-   Aguardando...
-  </p>
-</details>
+- **Fake.Accounts.***
+  - Fake.Accounts.Api (link: https://github.com/antonycharles/fake.accounts.api)
+  - Fake.Accounts.Login.Web.App (link: https://github.com/antonycharles/fake.accounts.login.web.app)
+- **Fake.Store.***
+  - Aguardando...
+- **Fake.Bank.***
+  - Aguardando...
+- **Fake.Common.***
+  - Aguardando...
