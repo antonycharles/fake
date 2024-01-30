@@ -1,0 +1,39 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="card card-login">
+    <div class="card-body pt-4">
+        <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
+        <h6 class="small">Entre com sua conta:</h6>
+        @if(ViewData.ModelState.Any(x => x.Key == "Form.error")){
+            <div class="alert alert-danger" role="alert">
+                @Html.ValidationMessage("Form.error",new{ @class=""})
+            </div>
+        }
+        <form method="post">
+            <input type="hidden" asp-for="Login.AppId">
+            <div class="form-floating mb-3">
+                <input type="email" asp-for="Login.Email"  class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">E-mail:</label>
+                <span asp-validation-for="Login.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="password" asp-for="Login.Password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password:</label>
+                <span asp-validation-for="Login.Password" class="text-danger"></span>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Entrar</button>
+            </div>
+        </form>
+        <div class="mt-4">
+            <a href="/recoverPassword?appId=@Model.Login.AppId">Esqueci minha senha</a>
+        </div>
+        <div class="mt-4">
+            <p><small>Ainda não tem uma conta?</small><br/><a href="/register?appId=@Model.Login.AppId">Criar uma conta</a></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="card card-login">
+    <div class="card-body pt-4">
+        <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
+        <h6 class="small">Criar conta:</h6>
+        <form method="post">
+            <input type="hidden" asp-for="Register.AppId">
+            <div class="form-floating mb-3">
+                <input type="text" asp-for="Register.Name" class="form-control" id="floatingInput" placeholder="Your name">
+                <label for="floatingInput">Name:</label>
+                <span asp-validation-for="Register.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" asp-for="Register.Email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">E-mail:</label>
+                <span asp-validation-for="Register.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" asp-for="Register.Password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password:</label>
+                <span asp-validation-for="Register.Password" class="text-danger"></span>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+            </div>
+        </form>
+        <div class="mt-4">
+            <p><small>Já possui conta?</small><br/><a href="/login">clique aqui</a></p>
+        </div>
+    </div>
+</div>

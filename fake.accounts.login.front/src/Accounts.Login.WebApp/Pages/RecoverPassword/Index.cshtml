@@ -1,0 +1,24 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Recover password";
+}
+
+<div class="card card-login">
+    <div class="card-body pt-4">
+        <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
+        <h6 class="small">Recuperação de senha:</h6>
+        <form>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">E-mail:</label>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Confirmar e-mail</button>
+            </div>
+        </form>
+        <div class="mt-4">
+            <p><small>Já possui conta?</small><br/><a href="/login">clique aqui</a></p>
+        </div>
+    </div>
+</div>

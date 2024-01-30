@@ -1,0 +1,28 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Reset password";
+}
+
+<div class="card card-login">
+    <div class="card-body pt-4">
+        <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
+        <h6 class="small">Redefina sua senha:</h6>
+        <form>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Senha:</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Confirmar senha:</label>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Redefinir</button>
+            </div>
+        </form>
+        <div class="mt-4">
+            <p><small>Já possui conta?</small><br/><a href="/login">clique aqui</a></p>
+        </div>
+    </div>
+</div>

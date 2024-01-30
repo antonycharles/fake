@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="card card-login">
+    <div class="card-body text-center">
+        <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
+        <br/>
+        @if (User.Identity.IsAuthenticated == true)
+        {
+            <h6>Welcome</h6>
+            <h2>@User.Identity.Name</h2>
+        }else{
+            <h1>Welcome!</h1>
+        }
+        <br/>
+        @if (User.Identity.IsAuthenticated == true)
+        {
+            <a href="/logout" class="btn btn-secondary">Logout</a>
+        }else{
+            <a href="/login" class="btn btn-success">Login</a>
+        }
+    </div>
+</div>

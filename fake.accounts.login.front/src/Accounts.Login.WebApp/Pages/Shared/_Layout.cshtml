@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Accounts.Login.WebApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Accounts.Login.WebApp.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+    </header>
+    <main role="main" class="container">
+        <div class="row align-items-center" style="min-height: 100vh">
+            <div class="col"></div>
+            <div class="col-10 col-sm-8 col-lg-5 col-xl-4">@RenderBody()</div>
+            <div class="col"></div>
+        </div>
+    </main>
+    <footer class="border-top footer text-muted text-center">
+        <div class="container">
+            <b>Fake |</b> Controlador de acesso &copy; 2023. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
