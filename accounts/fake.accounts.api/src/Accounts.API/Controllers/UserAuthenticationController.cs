@@ -27,7 +27,7 @@ public class UserAuthenticationController : ControllerBase
     [ProducesResponseType(typeof(AppTokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> AuthenticationAsync(LoginRequest request)
+    public async Task<IActionResult> LoginAsync(LoginRequest request)
     {
         try
         {
@@ -52,7 +52,7 @@ public class UserAuthenticationController : ControllerBase
     [ProducesResponseType(typeof(AppTokenResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateAsync(RegisterRequest request)
+    public async Task<IActionResult> SignupAsync(RegisterRequest request)
     {
         try
         {

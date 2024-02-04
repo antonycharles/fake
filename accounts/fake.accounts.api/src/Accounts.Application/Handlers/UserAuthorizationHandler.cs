@@ -52,7 +52,7 @@ namespace Accounts.Application.Handlers
 
         public async Task<AppTokenResponse> AuthenticationAsync(LoginRequest request)
         {
-            var userDb = await _userRepository.GetByEmail(request.Email);
+            var userDb = await _userRepository.GetByEmailAsync(request.Email);
 
             if(userDb == null)
                 throw new AuthenticationException(MSG_USER_OR_PASSAWORD_INVALID);

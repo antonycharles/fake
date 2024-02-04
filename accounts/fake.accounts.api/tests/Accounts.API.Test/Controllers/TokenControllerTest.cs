@@ -29,7 +29,7 @@ namespace Accounts.API.Test.Controllers
         }
         
         [Fact]
-        public void IndexGet_OkJsonWebKeyResponse_WhenTokenHandlerGetPublicKeyOk()
+        public void IndexGet_ReturnJsonWebKeyResponse_WhenTokenHandlerGetPublicKeyOk()
         {
             //Arrange
             IList<JsonWebKey> jsonWebKey = new List<JsonWebKey>(){
@@ -51,7 +51,7 @@ namespace Accounts.API.Test.Controllers
         }
 
         [Fact]
-        public void IndexGet_Problem500_WhenHandlerGetPublicKeyReturnGenericFakeException()
+        public void IndexGet_ReturnProblemInternalServerError_WhenHandlerGetPublicKeyReturnGenericFakeException()
         {
             //Arrange
             var genericFakeException = new GenericFakeException(); 

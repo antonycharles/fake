@@ -13,6 +13,8 @@ namespace Accounts.Infrastructure.Test.Fakes
             => new Faker<User>()
                 .RuleFor(r => r.Id, f => Guid.NewGuid())
                 .RuleFor(r => r.Name, f => f.Person.FirstName)
-                .RuleFor(r => r.Email, f => f.Person.Email);
+                .RuleFor(r => r.Email, f => f.Person.Email)
+                .RuleFor(r => r.PasswordHash, f => Guid.NewGuid().ToString())
+                .RuleFor(r => r.Salt, f => Guid.NewGuid().ToString());
     }
 }

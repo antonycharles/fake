@@ -1,9 +1,14 @@
-version: '3.4'
+version: '3.7'
 
 services:
     accountsdb:
         image: postgres:15-alpine
         restart: always
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.50'
+                    memory: 50M
         volumes:
             - db_postgresql:/docker-entrypoint-initdb.d
         container_name: dbpostgresql
@@ -15,6 +20,11 @@ services:
     cache:
         image: redis:6.2-alpine
         restart: always
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.50'
+                    memory: 50M
         ports:
             - '6379:6379'
         volumes: 

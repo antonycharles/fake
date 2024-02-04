@@ -30,7 +30,7 @@ namespace Accounts.API.Test.Controllers
         }
         
         [Fact]
-        public async void IndexGet_OKUserPaginationResponse_WhenHandlerGetPaginationOk()
+        public async void IndexGet_ReturnUserPaginationResponse_WhenHandlerGetPaginationOk()
         {
             //Arrange
             var userPaginationResponse = new UserPaginationResponse();
@@ -49,7 +49,7 @@ namespace Accounts.API.Test.Controllers
         }
 
         [Fact]
-        public async void IndexGet_Problem500_WhenHandlerGetPaginationGenericFakeException()
+        public async void IndexGet_ReturnProblemInternalServerError_WhenHandlerGetPaginationGenericFakeException()
         {
             //Arrange
             var genericFakeException = new GenericFakeException(); 

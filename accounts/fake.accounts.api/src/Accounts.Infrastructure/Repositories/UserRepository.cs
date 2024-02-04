@@ -15,7 +15,7 @@ namespace Accounts.Infrastructure.Repositories
 
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             return await _table
                 .Include(i => i.UsersProfiles)
@@ -24,8 +24,11 @@ namespace Accounts.Infrastructure.Repositories
 
         public async Task<IEnumerable<User>> GetPaginationAsync(string search, int position, int take)
         {
-            return await _table
-                .Where(WherePagination(search))
+            IQueryable<User> query = _dbContext.Set<User>();
+
+            query = WherePagination(search, query);
+
+            return await query
                 .OrderBy(o => o.Name)
                 .Skip(position == 0 ? position : (position - 1) * take)
                 .Take(take)
@@ -34,17 +37,23 @@ namespace Accounts.Infrastructure.Repositories
 
         public async Task<int> CountPaginationAsync(string search)
         {
-            return await _table
-                .Where(WherePagination(search))
-                .CountAsync();
+            IQueryable<User> query = _dbContext.Set<User>();
+            
+            query = WherePagination(search, query);
+
+            return await query.CountAsync();
         }
 
-        private static Expression<Func<User, bool>> WherePagination(string search)
+        private static IQueryable<User> WherePagination(string search, IQueryable<User> query)
         {
-            return w => 
-                w.Name.ToLower().Contains(search.ToLower()) ||
-                w.Email.ToLower().Contains(search.ToLower()) || 
-                (search == null || search == ""); 
+            if (search != null && search != "")
+            {
+                query = query.Where(
+                    w => w.Name.ToLower().Contains(search.ToLower()) ||
+                    w.Email.ToLower().Contains(search.ToLower()));
+            }
+
+            return query;
         }
     }
 }

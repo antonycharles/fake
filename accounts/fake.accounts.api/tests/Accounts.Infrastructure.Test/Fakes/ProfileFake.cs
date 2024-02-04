@@ -11,7 +11,7 @@ namespace Accounts.Infrastructure.Test.Fakes
     {
         public static Faker<Profile> Create()
         {
-            var profiles = new string[] {"Admin","Developer","Moderator","Seller"};
+            var profiles = new string[] {"AdminTest","DeveloperTest","ModeratorTest","SellerTest"};
             return new Faker<Profile>()
                 .RuleFor(r => r.Id, f => f.Random.Int(1,300))
                 .RuleFor(r => r.Name, f => f.PickRandom(profiles));

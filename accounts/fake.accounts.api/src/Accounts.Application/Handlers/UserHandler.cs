@@ -51,7 +51,7 @@ namespace Accounts.Application.Handlers
 
         public async Task<UserResponse> GetOrCreateByEmailAsync(UserRequest request)
         {
-            var user = await _userRepository.GetByEmail(request.Email);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
             
             if(user != null)
                 return user.ToResponse();
