@@ -1,3 +1,4 @@
+using Accounts.Core.Configurations;
 using Accounts.Core.Providers;
 using Accounts.Infrastructure.Data;
 using Accounts.Infrastructure.Seeds;
@@ -8,10 +9,10 @@ namespace Accounts.API.Configurations
     public static class DbConfiguration
     {
 
-        public static void AddDataBase(this WebApplicationBuilder builder)
+        public static void AddDataBase(this WebApplicationBuilder builder, AccountsSettings settings)
         {
-            var connectionString = builder.Configuration.GetConnectionString("WebApiDatabase");
-            builder.Services.AddDbContext<AccountsContext>(x => x.UseNpgsql(connectionString),ServiceLifetime.Singleton);
+            builder.Services.AddDbContext<AccountsContext>(x => 
+                x.UseNpgsql(settings.DatabaseConnection),ServiceLifetime.Singleton);
         }
 
         public static void AddMigration(this IHost host)

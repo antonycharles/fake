@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-    accountsdb:
+    dbpostgresql:
         image: postgres:15-alpine
         restart: always
         deploy:
@@ -12,26 +12,50 @@ services:
         volumes:
             - db_postgresql:/docker-entrypoint-initdb.d
         container_name: dbpostgresql
+        networks:
+            - fake-network
         ports:
             - "5432:5432"
         environment:
             POSTGRES_PASSWORD: "Postgres2022!"
 
-    cache:
+    redis:
         image: redis:6.2-alpine
         restart: always
+        container_name: redis
         deploy:
             resources:
                 limits:
                     cpus: '0.50'
                     memory: 50M
+        networks:
+            - fake-network
         ports:
             - '6379:6379'
         volumes: 
             - cache:/data
+    
+    accounts.api:
+        build: ./accounts/fake.accounts.api/
+        restart: always
+        image: accounts.api
+        container_name: accounts.api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+        ports:
+            - "8010:80"
+        networks:
+            - fake-network
+        depends_on:
+            - redis
+            - dbpostgresql
 
 volumes:
     cache:
         driver: local
     db_postgresql:
         driver: local
+        
+networks:
+  fake-network:
+    driver: bridge
