@@ -49,6 +49,11 @@ services:
         depends_on:
             - redis
             - dbpostgresql
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.50'
+                    memory: 100M
 
 volumes:
     cache:
