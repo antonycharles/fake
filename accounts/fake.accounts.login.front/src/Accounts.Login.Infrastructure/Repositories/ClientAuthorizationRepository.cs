@@ -21,13 +21,13 @@ namespace Accounts.Login.Infrastructure.Repositories
         private readonly IClientAuthorizationApiRepository _clientAuthorizationApiRepository;
         private readonly IDistributedCache _cache;  
         
-        private readonly ApiSettings _apiSettings;
+        private readonly LoginSettings _apiSettings;
         private readonly string _keyCache = "accountslogin:accountsapi:token";
 
         public ClientAuthorizationRepository(
             IClientAuthorizationApiRepository clientAuthorizationApiRepository,
             IDistributedCache cache,
-            IOptions<ApiSettings> apiSettings) 
+            IOptions<LoginSettings> apiSettings) 
         {
             _clientAuthorizationApiRepository = clientAuthorizationApiRepository;
             _cache = cache;

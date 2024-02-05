@@ -10,7 +10,7 @@ services:
                     cpus: '0.50'
                     memory: 50M
         volumes:
-            - db_postgresql:/docker-entrypoint-initdb.d
+            - db_postgresql:/var/lib/postgresql/data
         container_name: dbpostgresql
         networks:
             - fake-network
@@ -35,11 +35,11 @@ services:
         volumes: 
             - cache:/data
     
-    accounts.api:
+    fake.accounts.api:
         build: ./accounts/fake.accounts.api/
         restart: always
-        image: accounts.api
-        container_name: accounts.api
+        image: fake.accounts.api
+        container_name: fakeaccountsapi
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
         ports:
@@ -49,6 +49,26 @@ services:
         depends_on:
             - redis
             - dbpostgresql
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.50'
+                    memory: 100M
+    
+    fake.accounts.login.front:
+        build: ./accounts/fake.accounts.login.front/
+        restart: always
+        image: fake.accounts.login.front
+        container_name: fakeaccountsloginfront
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+        ports:
+            - "8011:80"
+        networks:
+            - fake-network
+        depends_on:
+            - redis
+            - fake.accounts.api
         deploy:
             resources:
                 limits:

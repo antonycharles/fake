@@ -10,7 +10,7 @@ namespace Accounts.Login.Infrastructure.Repositories.External
 {
     public interface IClientAuthorizationApiRepository
     {
-        [Post("/client-authorization/login")]
+        [Post("/client/authorization")]
         Task<TokenResponse> AuthenticationAsync([Body]ClientRequest request);
     }
 }

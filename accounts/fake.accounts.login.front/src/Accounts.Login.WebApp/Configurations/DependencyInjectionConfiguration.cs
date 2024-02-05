@@ -11,16 +11,12 @@ namespace Accounts.Login.WebApp.Configurations
 {
     public static class DependencyInjectionConfiguration
     {
-        public static void AddDependencyInjectionConfiguration(this WebApplicationBuilder builder)
+        public static void AddDependencyInjectionConfiguration(this WebApplicationBuilder builder, LoginSettings settings)
         {
-            builder.Services.AddOptions<ApiSettings>()
-            .BindConfiguration("ApiSettings")
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-            
+
             builder.Services.AddAuthentication();
-            builder.AddRedisDependencyInjection();
-            builder.AddRepositoryExternalDependencyInjection();
+            builder.AddRedisDependencyInjection(settings);
+            builder.AddRepositoryExternalDependencyInjection(settings);
             builder.Services.AddRepositoryDependencyInjection();
             builder.Services.AddHandlerDependencyInjection();
         }
@@ -47,27 +43,24 @@ namespace Accounts.Login.WebApp.Configurations
             services.AddSingleton<IClientAuthorizationRepository, ClientAuthorizationRepository>();
         }
 
-        private static void AddRepositoryExternalDependencyInjection(this WebApplicationBuilder builder)
+        private static void AddRepositoryExternalDependencyInjection(this WebApplicationBuilder builder, LoginSettings settings)
         {
-            var fakeAccountsApi = builder.Configuration.GetValue<string>("ApiSettings:FakeAccountsApiURL");
-
             builder.Services.AddRefitClient<IUserAuthenticationApiRepository>().ConfigureHttpClient(c =>
             {
-                c.BaseAddress = new  Uri(fakeAccountsApi);
+                c.BaseAddress = new  Uri(settings.FakeAccountsApiURL);
             });
             
             builder.Services.AddRefitClient<IClientAuthorizationApiRepository>().ConfigureHttpClient(c =>
             {
-                c.BaseAddress = new  Uri(fakeAccountsApi);
+                c.BaseAddress = new  Uri(settings.FakeAccountsApiURL);
             });
         }
 
-        private static void AddRedisDependencyInjection(this WebApplicationBuilder builder)
+        private static void AddRedisDependencyInjection(this WebApplicationBuilder builder, LoginSettings settings)
         {
-            var redisURL = builder.Configuration.GetValue<string>("ApiSettings:RedisURL");
             builder.Services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = redisURL;
+                options.Configuration = settings.RedisURL;
             });
         }
     }

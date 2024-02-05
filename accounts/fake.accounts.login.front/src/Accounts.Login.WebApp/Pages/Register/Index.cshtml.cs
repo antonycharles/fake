@@ -23,12 +23,19 @@ public class IndexModel : PageModel
         _loginHandler = loginHandler;
     }
 
-    public void OnGet(string? appId)
+    public IActionResult OnGet(string? appId)
     {
+        if(User.Identity.IsAuthenticated){
+            var id = User.Claims.First(s => s.Type == ClaimTypes.Sid).Value;
+            return RedirectToPage("../index");
+        }
+
         Register = new RegisterRequest();
         if(Guid.TryParse(appId, out _)){
             Register.AppId = Guid.Parse(appId);
         }
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPost()

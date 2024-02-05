@@ -3,9 +3,12 @@ using Accounts.Login.WebApp.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.AddConfigurationRoot();
 builder.Services.AddRazorPages();
 
-builder.AddDependencyInjectionConfiguration();
+var settings = builder.GetSettings();
+
+builder.AddDependencyInjectionConfiguration(settings);
 
 var app = builder.Build();
 
