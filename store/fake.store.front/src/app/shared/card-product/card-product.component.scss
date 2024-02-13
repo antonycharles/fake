@@ -1,0 +1,24 @@
+.card-product {
+  text-decoration: none;
+  color: black;
+  mat-card{
+    max-width: 170px;
+    margin: 5px;
+  }
+  img{
+    background-color: #ededed;
+    padding: 10px;
+    width: auto;
+    margin: 10px;
+  }
+  h5{
+    font-weight: 500;
+    font-size: 1rem;
+    margin: 0;
+  }
+  p{
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-top: 5px;
+  }
+}

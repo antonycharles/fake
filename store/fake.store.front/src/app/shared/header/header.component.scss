@@ -1,0 +1,24 @@
+.app-header{
+  .toolbar{
+    background-color: #403D58;
+  }
+  a {
+    text-decoration: none;
+  }
+  .title{
+    color: #9E95E3;
+    font-weight: bold;
+    font-size: 2rem;
+
+    span{
+      color: white;
+    }
+  }
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  button:first{
+    margin-right: 15px;
+  }
+}
