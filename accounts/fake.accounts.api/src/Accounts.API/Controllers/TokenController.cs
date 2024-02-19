@@ -7,7 +7,8 @@ namespace Accounts.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/token")]
+[ApiVersion("1")]
+[Route("api/v{version:apiVersion}/token")]
 public class TokenController : ControllerBase
 {
     private readonly ILogger<TokenController> _logger;

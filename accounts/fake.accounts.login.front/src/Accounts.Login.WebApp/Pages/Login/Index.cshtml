@@ -13,15 +13,20 @@
                 @Html.ValidationMessage("Form.error",new{ @class=""})
             </div>
         }
+        @if(ViewData.ModelState.Any(s => s.Key == "Login.AppId" && s.Value?.Errors.Count > 0)){
+            <div class="alert alert-danger" role="alert">
+                @Html.ValidationMessage("Login.AppId",new{ @class=""})
+            </div>
+        }
         <form method="post">
             <input type="hidden" asp-for="Login.AppId">
             <div class="form-floating mb-3">
-                <input type="email" asp-for="Login.Email"  class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="email" asp-for="Login.Email"  class="form-control" id="floatingInput" required placeholder="name@example.com">
                 <label for="floatingInput">E-mail:</label>
                 <span asp-validation-for="Login.Email" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input type="password" asp-for="Login.Password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" asp-for="Login.Password" class="form-control" id="floatingPassword" required placeholder="Password">
                 <label for="floatingPassword">Password:</label>
                 <span asp-validation-for="Login.Password" class="text-danger"></span>
             </div>

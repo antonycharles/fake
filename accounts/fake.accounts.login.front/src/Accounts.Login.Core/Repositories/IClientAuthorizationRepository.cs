@@ -7,6 +7,6 @@ namespace Accounts.Login.Core.Repositories
 {
     public interface IClientAuthorizationRepository
     {
-        Task<string> GetToken();
+        Task<string> GetTokenAsync();
     } 
 }

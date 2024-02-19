@@ -22,6 +22,18 @@ namespace Accounts.Login.Application.Handlers
             return authetication;  
         }
 
+        public async Task<AppTokenResponse> RefrashAsync(Guid appId, Guid userId)
+        {
+            var request = new RefrashRequest()
+            {
+                AppId = appId,
+                UserId = userId
+            };
+
+            var authetication = await _userAuthenticationRepository.RefrashAsync(request);
+            return authetication;  
+        }
+
         public async Task<AppTokenResponse> RegisterAsync(RegisterRequest request)
         {
             var authetication = await _userAuthenticationRepository.RegisterAsync(request);

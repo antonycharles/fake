@@ -12,5 +12,7 @@ namespace Accounts.Login.Core.Settings
         public string FakeAccountsApiURL { get; set; }
         [Required]
         public string RedisURL { get; set; }
+        [Required]
+        public string RedisInstanceName { get; set; }
     }
 }

@@ -12,8 +12,12 @@ namespace Accounts.Login.Infrastructure.Repositories.External
     public interface IUserAuthenticationApiRepository
     {
         [Post("/user/authentication/login")]
-        Task<AppTokenResponse> AuthenticationAsync([Header("Authorization")] string bearerToken, LoginRequest request);
+        Task<AppTokenResponse> AuthenticationAsync(LoginRequest request);
+        
         [Post("/user/authentication/signup")]
-        Task<AppTokenResponse> RegisterAsync([Header("Authorization")] string bearerToken, RegisterRequest request);
+        Task<AppTokenResponse> RegisterAsync(RegisterRequest request);
+        
+        [Post("/user/authentication/refrash")]
+        Task<AppTokenResponse> RefrashAsync(RefrashRequest request);
     }
 }

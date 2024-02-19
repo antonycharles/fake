@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Accounts.Login.Core.Exceptions;
 using Accounts.Login.Core.Models.Client;
 using Accounts.Login.Core.Models.Token;
 using Accounts.Login.Core.Repositories;
 using Accounts.Login.Core.Settings;
 using Accounts.Login.Infrastructure.Repositories.External;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Refit;
 
@@ -19,48 +14,44 @@ namespace Accounts.Login.Infrastructure.Repositories
     public class ClientAuthorizationRepository : IClientAuthorizationRepository
     {
         private readonly IClientAuthorizationApiRepository _clientAuthorizationApiRepository;
-        private readonly IDistributedCache _cache;  
+        private readonly ICacheRepository _cacheRepository;  
         
         private readonly LoginSettings _apiSettings;
-        private readonly string _keyCache = "accountslogin:accountsapi:token";
+        private readonly string _keyCache = "accountsapi:token";
 
         public ClientAuthorizationRepository(
             IClientAuthorizationApiRepository clientAuthorizationApiRepository,
-            IDistributedCache cache,
+            ICacheRepository cacheRepository,
             IOptions<LoginSettings> apiSettings) 
         {
-            _clientAuthorizationApiRepository = clientAuthorizationApiRepository;
-            _cache = cache;
+            _clientAuthorizationApiRepository = clientAuthorizationApiRepository ?? throw new ArgumentNullException(nameof(clientAuthorizationApiRepository));
+            _cacheRepository = cacheRepository ?? throw new ArgumentNullException(nameof(cacheRepository));
             _apiSettings = apiSettings.Value;
         }
 
-        public async Task<string> GetToken()
+        public async Task<string> GetTokenAsync()
         {
             return await GetTokenCacheAsync();
         }
 
         private async Task<string> GetTokenCacheAsync()
         {
-            var token = await _cache.GetStringAsync(_keyCache);
+            var token = await _cacheRepository.GetAsync<TokenResponse>(_keyCache);
 
             if(token != null)
-                return token;
+                return token.Token;
             
             var tokenResponse = await GetTokenApiAsync();
 
-            var expiretion = tokenResponse.ExpiresIn.Value.AddMinutes(-10) - DateTime.Now;
-
-            await _cache.SetStringAsync(_keyCache, tokenResponse.Token, new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = expiretion
-            });
+            await _cacheRepository.SetAsync<TokenResponse>(_keyCache, tokenResponse, tokenResponse.ExpiresIn);
 
             return tokenResponse.Token;
         }
 
         private async Task<TokenResponse> GetTokenApiAsync()
         {
-            try{
+            try
+            {
                 var token = await _clientAuthorizationApiRepository.AuthenticationAsync(new ClientRequest{
                     ClientId = _apiSettings.AccountsClientId,
                     ClientSecret = _apiSettings.AccountsClientSecret

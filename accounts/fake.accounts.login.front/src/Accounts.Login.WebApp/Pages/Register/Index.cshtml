@@ -8,20 +8,30 @@
     <div class="card-body pt-4">
         <h3 class="card-title m-0 mb-4 text-center"><span class="text-fake">Fake.</span>Accounts</h3>
         <h6 class="small">Criar conta:</h6>
+        @if(ViewData.ModelState.Any(x => x.Key == "Form.error")){
+            <div class="alert alert-danger" role="alert">
+                @Html.ValidationMessage("Form.error",new{ @class=""})
+            </div>
+        }
+        @if(ViewData.ModelState.Any(s => s.Key == "Register.AppId" && s.Value?.Errors.Count > 0)){
+            <div class="alert alert-danger" role="alert">
+                @Html.ValidationMessage("Register.AppId",new{ @class=""})
+            </div>
+        }
         <form method="post">
             <input type="hidden" asp-for="Register.AppId">
             <div class="form-floating mb-3">
-                <input type="text" asp-for="Register.Name" class="form-control" id="floatingInput" placeholder="Your name">
+                <input type="text" asp-for="Register.Name" class="form-control" id="floatingInput" required placeholder="Your name">
                 <label for="floatingInput">Name:</label>
                 <span asp-validation-for="Register.Name" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" asp-for="Register.Email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="email" asp-for="Register.Email" class="form-control" id="floatingInput" required placeholder="name@example.com">
                 <label for="floatingInput">E-mail:</label>
                 <span asp-validation-for="Register.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" asp-for="Register.Password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" asp-for="Register.Password" class="form-control" id="floatingPassword" required placeholder="Password">
                 <label for="floatingPassword">Password:</label>
                 <span asp-validation-for="Register.Password" class="text-danger"></span>
             </div>

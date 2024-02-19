@@ -16,9 +16,9 @@ namespace Accounts.Login.WebApp.Configurations
 
             builder.Services.AddAuthentication();
             builder.AddRedisDependencyInjection(settings);
-            builder.AddRepositoryExternalDependencyInjection(settings);
             builder.Services.AddRepositoryDependencyInjection();
             builder.Services.AddHandlerDependencyInjection();
+            builder.AddRepositoryExternalDependencyInjection(settings);
         }
 
         private static void AddAuthentication(this IServiceCollection services)
@@ -39,16 +39,20 @@ namespace Accounts.Login.WebApp.Configurations
 
         private static void AddRepositoryDependencyInjection(this IServiceCollection services)
         {
-            services.AddSingleton<IUserAuthenticationRepository,UserAuthenticationRepository>();
-            services.AddSingleton<IClientAuthorizationRepository, ClientAuthorizationRepository>();
+            services.AddTransient<IUserAuthenticationRepository,UserAuthenticationRepository>();
+            services.AddTransient<IClientAuthorizationRepository, ClientAuthorizationRepository>();
+            services.AddTransient<ICacheRepository,CacheRepository>();
         }
 
         private static void AddRepositoryExternalDependencyInjection(this WebApplicationBuilder builder, LoginSettings settings)
         {
+            builder.Services.AddTransient<ClientAuthorizationHandler>();
+
             builder.Services.AddRefitClient<IUserAuthenticationApiRepository>().ConfigureHttpClient(c =>
             {
                 c.BaseAddress = new  Uri(settings.FakeAccountsApiURL);
-            });
+            })
+            .AddHttpMessageHandler<ClientAuthorizationHandler>();
             
             builder.Services.AddRefitClient<IClientAuthorizationApiRepository>().ConfigureHttpClient(c =>
             {
@@ -61,6 +65,7 @@ namespace Accounts.Login.WebApp.Configurations
             builder.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = settings.RedisURL;
+                options.InstanceName = settings.RedisInstanceName;
             });
         }
     }

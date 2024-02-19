@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Accounts.API.Controllers;
 
 [ApiController]
-[Route("api/client/authorization")]
+[ApiVersion("1")]
+[Route("api/v{version:apiVersion}/client/authorization")]
 public class ClientAuthenticationController : ControllerBase
 {
     private readonly ILogger<ClientAuthenticationController> _logger;

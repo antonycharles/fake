@@ -1,16 +1,11 @@
-using System.Security.Claims;
 using Accounts.Login.Core.Handlers.Interfaces;
 using Accounts.Login.Core.Models.Login;
-using Accounts.Login.Core.Models.Token;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using Accounts.Login.WebApp.PageBase;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Accounts.Login.WebApp.Pages.Login;
 
-public class IndexModel : PageModel
+public class IndexModel : PageModelBase
 {
     private readonly ILogger<IndexModel> _logger;
     private readonly ILoginHandler _loginHandler;
@@ -23,62 +18,44 @@ public class IndexModel : PageModel
         _loginHandler = loginHandler;
     }
 
-    public IActionResult OnGet(string? appId)
+    public async Task<IActionResult> OnGetAsync(string appId)
     {
-        if(User.Identity.IsAuthenticated){
-            var id = User.Claims.First(s => s.Type == ClaimTypes.Sid).Value;
-            return RedirectToPage("../index");
-        }
-
-        Login = new LoginRequest();
-        if(Guid.TryParse(appId, out _)){
-            Login.AppId = Guid.Parse(appId);
-        }
-
-        return Page();
-    }
-
-    public async Task<IActionResult> OnPost()
-    {
-        try{
-            if (!ModelState.IsValid)
+        try
+        {
+            Login = new LoginRequest();
+            var appIdGuid = ConvertAppId(appId);
+            if(IsAuthenticated)
             {
-                if(Login.AppId == Guid.Empty)
-                    ModelState.AddModelError("Form.error", "AppId not found!");
-
-                return Page();
+                var userToken = await _loginHandler.RefrashAsync(appId:appIdGuid,userId:UserId);
+                return CallbackLogin(userToken);
             }
 
-            var userToken = await _loginHandler.AuthenticationAsync(Login);
-            await CreateCookieUserAsync(userToken);
-
-            return RedirectToPage("../index");
+            Login.AppId = appIdGuid;
+            return Page();
         }
         catch(Exception ex)
         {
             ModelState.AddModelError("Form.error", ex.Message);
             return Page();
         }
-        
     }
 
-    public async Task CreateCookieUserAsync(AppTokenResponse userToken)
+    public async Task<IActionResult> OnPostAsync()
     {
-        var userClaims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Sid, userToken.User.Id.ToString()),
-                new Claim(ClaimTypes.Name, userToken.User.Name),
-                new Claim(ClaimTypes.Email, userToken.User.Email),
-            };
-            var minhaIdentity = new ClaimsIdentity(userClaims, "Usuario");
-            var userPrincipal = new ClaimsPrincipal(new[] { minhaIdentity });
-                
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, 
-                userPrincipal, 
-                new AuthenticationProperties{
-                    IsPersistent = true
-                }
-            );
+        try
+        {
+            if (!ModelState.IsValid)
+                return Page();
+
+            var userToken = await _loginHandler.AuthenticationAsync(Login);
+            await CreateCookieUserAsync(userToken);
+
+            return CallbackLogin(userToken);
+        }
+        catch(Exception ex)
+        {
+            ModelState.AddModelError("Form.error", ex.Message);
+            return Page();
+        }
     }
 }

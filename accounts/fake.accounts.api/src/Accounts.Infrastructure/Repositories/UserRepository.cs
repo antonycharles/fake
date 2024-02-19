@@ -17,9 +17,16 @@ namespace Accounts.Infrastructure.Repositories
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await _table
+            var result = await _table
+                .AsNoTracking()
                 .Include(i => i.UsersProfiles)
+                .ThenInclude(i => i.Profile.App)
+                .Include(i => i.UsersProfiles)
+                .ThenInclude(i => i.Profile.ProfilesRoles)
+                .ThenInclude(i => i.Role)
                 .FirstOrDefaultAsync(w => w.Email == email);
+
+            return result;
         }
 
         public async Task<IEnumerable<User>> GetPaginationAsync(string search, int position, int take)

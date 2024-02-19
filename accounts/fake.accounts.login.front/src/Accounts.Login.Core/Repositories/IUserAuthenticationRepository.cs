@@ -12,5 +12,6 @@ namespace Accounts.Login.Core.Repositories
     {
         Task<AppTokenResponse> AuthenticationAsync(LoginRequest request);
         Task<AppTokenResponse> RegisterAsync(RegisterRequest request);
+        Task<AppTokenResponse> RefrashAsync(RefrashRequest request);
     }
 }

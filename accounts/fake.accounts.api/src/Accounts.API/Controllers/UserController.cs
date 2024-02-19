@@ -13,7 +13,8 @@ using Microsoft.Extensions.Logging;
 namespace Accounts.API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+[ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/user")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;

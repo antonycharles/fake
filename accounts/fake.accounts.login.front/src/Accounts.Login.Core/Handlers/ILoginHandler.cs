@@ -8,5 +8,6 @@ namespace Accounts.Login.Core.Handlers.Interfaces
     {
         Task<AppTokenResponse> AuthenticationAsync(LoginRequest request);
         Task<AppTokenResponse> RegisterAsync(RegisterRequest request);
+        Task<AppTokenResponse> RefrashAsync(Guid appId, Guid userId);
     }
 }

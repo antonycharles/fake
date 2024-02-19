@@ -5,6 +5,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Accounts.Login.Core.Exceptions;
+using Accounts.Login.Core.Models.Errors;
 using Accounts.Login.Core.Models.Login;
 using Accounts.Login.Core.Models.Register;
 using Accounts.Login.Core.Models.Token;
@@ -16,30 +17,40 @@ namespace Accounts.Login.Infrastructure.Repositories
 {
     public class UserAuthenticationRepository : IUserAuthenticationRepository
     {
-        private readonly IClientAuthorizationRepository _clientAuthorizationRepository;
         private readonly IUserAuthenticationApiRepository _userAuthenticationApiRepository;
 
         public UserAuthenticationRepository(
-            IClientAuthorizationRepository clientAuthorizationRepository, 
             IUserAuthenticationApiRepository userAuthenticationApiRepository)
         {
-            _clientAuthorizationRepository = clientAuthorizationRepository;
-            _userAuthenticationApiRepository = userAuthenticationApiRepository;
+            _userAuthenticationApiRepository = userAuthenticationApiRepository ?? throw new ArgumentNullException(nameof(userAuthenticationApiRepository));
         }
 
         public async Task<AppTokenResponse> AuthenticationAsync(LoginRequest request)
         {
-            var token = await _clientAuthorizationRepository.GetToken();
-
-            try{
-                return await _userAuthenticationApiRepository.AuthenticationAsync($"Bearer {token}", request);
+            try
+            {
+                return await _userAuthenticationApiRepository.AuthenticationAsync(request);
             }
             catch(ApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ProblemDetails? problemDetails  = JsonSerializer.Deserialize<ProblemDetails>(ex.Content, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                CustomProblemDetails? problemDetails  = JsonSerializer.Deserialize<CustomProblemDetails>(ex.Content);
+                throw new ExternalApiException(problemDetails?.Detail);
+            }
+            catch(Exception ex)
+            {
+                throw new ExternalApiException(ex.Message);
+            }
+        }
+
+        public async Task<AppTokenResponse> RefrashAsync(RefrashRequest request)
+        {
+            try
+            {
+                return await _userAuthenticationApiRepository.RefrashAsync(request);
+            }
+            catch(ApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                CustomProblemDetails? problemDetails  = JsonSerializer.Deserialize<CustomProblemDetails>(ex.Content);
                 throw new ExternalApiException(problemDetails?.Detail);
             }
             catch(Exception ex)
@@ -50,17 +61,13 @@ namespace Accounts.Login.Infrastructure.Repositories
 
         public async Task<AppTokenResponse> RegisterAsync(RegisterRequest request)
         {
-            var token = await _clientAuthorizationRepository.GetToken();
-
-            try{
-                return await _userAuthenticationApiRepository.RegisterAsync($"Bearer {token}", request);
+            try
+            {
+                return await _userAuthenticationApiRepository.RegisterAsync(request);
             }
             catch(ApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {
-                ProblemDetails? problemDetails  = JsonSerializer.Deserialize<ProblemDetails>(ex.Content, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                CustomProblemDetails? problemDetails  = JsonSerializer.Deserialize<CustomProblemDetails>(ex.Content);
                 throw new ExternalApiException(problemDetails?.Detail);
             }
             catch(Exception ex)

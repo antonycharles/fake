@@ -9,7 +9,8 @@ namespace Accounts.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/user/authentication")]
+[ApiVersion("1")]
+[Route("api/v{version:apiVersion}/user/authentication")]
 public class UserAuthenticationController : ControllerBase
 {
     private readonly ILogger<UserAuthenticationController> _logger;

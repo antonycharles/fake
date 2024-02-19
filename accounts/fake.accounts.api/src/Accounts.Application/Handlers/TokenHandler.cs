@@ -83,7 +83,7 @@ namespace Accounts.Application.Handlers
 
             return new TokenResponse
             {
-                ExpiresIn = jwt.Expires,
+                ExpiresIn = jwt.Expires.Value.AddMinutes(-3),
                 Token = lastJws
             };
         }
@@ -96,7 +96,7 @@ namespace Accounts.Application.Handlers
                 Audience = T_AUDIENCE,
                 IssuedAt = DateTime.Now,
                 NotBefore = DateTime.Now,
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddHours(1).AddMinutes(3),
                 Subject = new ClaimsIdentity(claims)
             };
         }
