@@ -14,10 +14,8 @@ namespace Accounts.Login.Infrastructure.Repositories
     public class ClientAuthorizationRepository : IClientAuthorizationRepository
     {
         private readonly IClientAuthorizationApiRepository _clientAuthorizationApiRepository;
-        private readonly ICacheRepository _cacheRepository;  
         
         private readonly LoginSettings _apiSettings;
-        private readonly string _keyCache = "accountsapi:token";
 
         public ClientAuthorizationRepository(
             IClientAuthorizationApiRepository clientAuthorizationApiRepository,
@@ -25,30 +23,10 @@ namespace Accounts.Login.Infrastructure.Repositories
             IOptions<LoginSettings> apiSettings) 
         {
             _clientAuthorizationApiRepository = clientAuthorizationApiRepository ?? throw new ArgumentNullException(nameof(clientAuthorizationApiRepository));
-            _cacheRepository = cacheRepository ?? throw new ArgumentNullException(nameof(cacheRepository));
             _apiSettings = apiSettings.Value;
         }
 
-        public async Task<string> GetTokenAsync()
-        {
-            return await GetTokenCacheAsync();
-        }
-
-        private async Task<string> GetTokenCacheAsync()
-        {
-            var token = await _cacheRepository.GetAsync<TokenResponse>(_keyCache);
-
-            if(token != null)
-                return token.Token;
-            
-            var tokenResponse = await GetTokenApiAsync();
-
-            await _cacheRepository.SetAsync<TokenResponse>(_keyCache, tokenResponse, tokenResponse.ExpiresIn);
-
-            return tokenResponse.Token;
-        }
-
-        private async Task<TokenResponse> GetTokenApiAsync()
+        public async Task<TokenResponse> GetTokenAsync()
         {
             try
             {

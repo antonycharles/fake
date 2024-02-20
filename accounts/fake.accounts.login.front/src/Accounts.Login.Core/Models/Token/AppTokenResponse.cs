@@ -12,5 +12,6 @@ namespace Accounts.Login.Core.Models.Token
         public UserResponse User { get; set; }
         public string CallbackUrl { get; set; }
         public TokenResponse Token { get; set; }
+        public string AccessToken { get; set; }
     }
 }

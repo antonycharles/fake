@@ -40,7 +40,7 @@ namespace Accounts.Login.WebApp.PageBase
         protected IActionResult CallbackLogin(AppTokenResponse userToken)
         {
             if(userToken.CallbackUrl is not null)
-                return Redirect(userToken.CallbackUrl);
+                return Redirect($"{userToken.CallbackUrl}?accessToken={userToken.AccessToken}");
 
             return RedirectToPage("../index");
         }

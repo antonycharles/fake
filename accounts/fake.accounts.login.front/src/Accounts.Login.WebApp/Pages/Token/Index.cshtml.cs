@@ -1,34 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
-using System.Threading.Tasks;
-using Accounts.Login.Core.Models.User;
+using Accounts.Login.Core.Handlers;
 using Accounts.Login.WebApp.PageBase;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace Accounts.Login.WebApp.Pages.Token
 {
     public class Index : PageModelBase
     {
         private readonly ILogger<Index> _logger;
+    private readonly ILoginTokenHandler _loginTokenHandler;
 
-        public Index(ILogger<Index> logger)
+        public Index(ILogger<Index> logger, ILoginTokenHandler loginTokenHandler)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _loginTokenHandler = loginTokenHandler ?? throw new ArgumentNullException(nameof(loginTokenHandler));
         }
 
-        public JsonResult OnGet()
+        public async Task<JsonResult> OnGetAsync(string accessToken)
         {
             try
             {
-                if(!IsAuthenticated)
+                if(!IsAuthenticated || accessToken is null)
                     throw new AuthenticationException("User not authorized");
 
+                var token = await _loginTokenHandler.GetTokenAsync(accessToken);
+
                 Response.StatusCode = StatusCodes.Status200OK;
-                return new JsonResult(new UserResponse { Id = Guid.NewGuid(), Name = UserName });
+                return new JsonResult(token);
 
             }
             catch(AuthenticationException ex)

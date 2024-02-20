@@ -6,6 +6,8 @@ using Accounts.Login.Infrastructure.Repositories.External;
 using Accounts.Login.Infrastructure.Repositories;
 using Accounts.Login.Core.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Accounts.Login.Core.Handlers;
+using Accounts.Login.Application.Cache;
 
 namespace Accounts.Login.WebApp.Configurations
 {
@@ -34,25 +36,29 @@ namespace Accounts.Login.WebApp.Configurations
 
         private static void AddHandlerDependencyInjection(this IServiceCollection services)
         {
+            services.AddSingleton<ICacheKeyProvider,CacheKeyProvider>();
+
             services.AddSingleton<ILoginHandler,LoginHandler>();
+            services.AddSingleton<ILoginTokenHandler,LoginTokenHandler>();
+            services.AddSingleton<IClientAuthorizationHandler,ClientAuthorizationHandler>();
         }
 
         private static void AddRepositoryDependencyInjection(this IServiceCollection services)
         {
-            services.AddTransient<IUserAuthenticationRepository,UserAuthenticationRepository>();
-            services.AddTransient<IClientAuthorizationRepository, ClientAuthorizationRepository>();
-            services.AddTransient<ICacheRepository,CacheRepository>();
+            services.AddSingleton<IUserAuthenticationRepository,UserAuthenticationRepository>();
+            services.AddSingleton<IClientAuthorizationRepository, ClientAuthorizationRepository>();
+            services.AddSingleton<ICacheRepository,CacheRepository>();
         }
 
         private static void AddRepositoryExternalDependencyInjection(this WebApplicationBuilder builder, LoginSettings settings)
         {
-            builder.Services.AddTransient<ClientAuthorizationHandler>();
+            builder.Services.AddSingleton<ClientAuthorizationDelegatingHandler>();
 
             builder.Services.AddRefitClient<IUserAuthenticationApiRepository>().ConfigureHttpClient(c =>
             {
                 c.BaseAddress = new  Uri(settings.FakeAccountsApiURL);
             })
-            .AddHttpMessageHandler<ClientAuthorizationHandler>();
+            .AddHttpMessageHandler<ClientAuthorizationDelegatingHandler>();
             
             builder.Services.AddRefitClient<IClientAuthorizationApiRepository>().ConfigureHttpClient(c =>
             {
@@ -65,7 +71,6 @@ namespace Accounts.Login.WebApp.Configurations
             builder.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = settings.RedisURL;
-                options.InstanceName = settings.RedisInstanceName;
             });
         }
     }

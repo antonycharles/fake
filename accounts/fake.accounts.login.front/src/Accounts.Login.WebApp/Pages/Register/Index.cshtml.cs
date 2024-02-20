@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Accounts.Login.Core.Handlers.Interfaces;
 using Accounts.Login.Core.Models.Register;
 using Accounts.Login.WebApp.PageBase;
@@ -16,8 +15,8 @@ public class IndexModel : PageModelBase
 
     public IndexModel(ILogger<IndexModel> logger, ILoginHandler loginHandler)
     {
-        _logger = logger;
-        _loginHandler = loginHandler;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _loginHandler = loginHandler ?? throw new ArgumentNullException(nameof(loginHandler));
     }
 
     public async Task<IActionResult> OnGetAsync(string? appId)

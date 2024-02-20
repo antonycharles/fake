@@ -1,28 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Accounts.Login.Application.Cache;
+using Accounts.Login.Core.Handlers;
+using Accounts.Login.Core.Models.Token;
 using Accounts.Login.Core.Repositories;
 
 namespace Accounts.Login.Application.Handlers
 {
-    public class ClientAuthorizationHandler : DelegatingHandler
+    public class ClientAuthorizationHandler : IClientAuthorizationHandler
     {
+        private readonly ICacheRepository _cacheRepository;
         private readonly IClientAuthorizationRepository _clientAuthorizationRepository;
+        private readonly ICacheKeyProvider _cacheKeyProvider;
 
-        public ClientAuthorizationHandler(IClientAuthorizationRepository clientAuthorizationRepository)
+        public ClientAuthorizationHandler(
+            ICacheRepository cacheRepository,
+            IClientAuthorizationRepository clientAuthorizationRepository,
+            ICacheKeyProvider cacheKeyProvider)
         {
+            _cacheRepository = cacheRepository ?? throw new ArgumentNullException(nameof(cacheRepository));
             _clientAuthorizationRepository = clientAuthorizationRepository ?? throw new ArgumentNullException(nameof(clientAuthorizationRepository));
+            _cacheKeyProvider = cacheKeyProvider ?? throw new ArgumentNullException(nameof(cacheKeyProvider));
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public async Task<string> GetTokenAsync()
         {
-            var token = await _clientAuthorizationRepository.GetTokenAsync();
+            var token = await _cacheRepository.GetAsync<TokenResponse>(
+                _cacheKeyProvider.KeyAccounstsApiToken()
+            );
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if(token != null)
+                return token.Token;
+            
+            var tokenResponse = await _clientAuthorizationRepository.GetTokenAsync();
 
-            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            await _cacheRepository.SetAsync<TokenResponse>(
+                _cacheKeyProvider.KeyAccounstsApiToken(), 
+                tokenResponse, 
+                tokenResponse.ExpiresIn);
+
+            return tokenResponse.Token;
         }
     }
 }
