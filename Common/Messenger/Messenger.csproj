@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageVersion>1.0.40</PackageVersion>
+    <PackageId>Common.Messenger</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+    <PackageReference Include="Polly" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Configurations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Configurations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Configurations\**" />
+  </ItemGroup>
+
+</Project>

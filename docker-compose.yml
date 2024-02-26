@@ -18,6 +18,15 @@ services:
         environment:
             POSTGRES_PASSWORD: "Postgres2022!"
 
+    message.broker.rabbitmq:
+        build: ./infra/rabbitmq/
+        container_name: messagebrokerrabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - fake-network
+
     redis:
         image: redis:6.2-alpine
         container_name: redis
