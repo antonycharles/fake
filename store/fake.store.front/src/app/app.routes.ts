@@ -6,14 +6,15 @@ import { ProductComponent } from './pages/product/product.component';
 export const routes: Routes = [
     {
         path:'',
-        component:HomeComponent
+        component:HomeComponent,
+        pathMatch:'full'
     },
     {
         path:'cart',
         component:CartComponent
     },
     {
-        path:'image',
+        path:'product/:slug',
         component:ProductComponent
     }
 ];

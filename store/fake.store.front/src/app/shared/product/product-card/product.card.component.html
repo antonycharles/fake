@@ -1,0 +1,9 @@
+<a class="card-product" routerLink="/product/{{ product.slug }}" routerLinkActive="active">
+    <mat-card>
+        <img mat-card-image src="{{ product.image }}" alt="{{ product.title }}">
+        <mat-card-content>
+            <h5>{{ product.title }}</h5>
+            <p>{{ product.price }}</p>
+        </mat-card-content>
+    </mat-card>
+</a>

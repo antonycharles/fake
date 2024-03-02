@@ -4,9 +4,8 @@
             <img mat-card-image src="../../../assets/imagens/050-hand.png" alt="Imagem de Veneza">
         </figure>
         <div class="header">
-            <h1>Robot</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+            <h1>{{ product.title }}</h1>
+            <p>{{ product.description }}</p>
             <a routerLink="/cart" routerLinkActive="active" mat-raised-button color="primary">R$ 59,99</a>
         </div>
     </app-container>
@@ -16,12 +15,6 @@
     <br/>
     <app-container>
         <h5>Others:</h5>
-        <div class="card-wrapper">
-            <app-card-product></app-card-product>
-            <app-card-product></app-card-product>
-            <app-card-product></app-card-product>
-            <app-card-product></app-card-product>
-            <app-card-product></app-card-product>
-        </div>
+        <app-product-list></app-product-list>
     </app-container>
 </section>

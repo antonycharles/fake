@@ -20,5 +20,5 @@ $my-theme: mat.define-light-theme((
 @include mat.all-component-themes($my-theme);
 @include mat.strong-focus-indicators-theme($my-theme);
 
-html, body { height: 100%; }
+html, body { background-color: #f9fafb; height: 100%; }
 body { margin: 0; font-family: "Open Sans", sans-serif; }
