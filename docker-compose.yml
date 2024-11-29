@@ -80,22 +80,6 @@ services:
                     cpus: '0.50'
                     memory: 100M
 
-    fake.store.front:
-        build: ./store/fake.store.front/
-        image: fake.store.front
-        container_name: fakestorefront
-        ports:
-            - "4300:80"
-        networks:
-            - fake-network
-        depends_on:
-            - fake.accounts.login.front
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.50'
-                    memory: 100M
-
 volumes:
     cache:
         driver: local
